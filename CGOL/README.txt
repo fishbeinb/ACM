@@ -1,0 +1,1 @@
+Sequencer following Conway's Game of Life
