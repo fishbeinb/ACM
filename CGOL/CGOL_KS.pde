@@ -6,7 +6,7 @@ OscP5 oscP5;
 NetAddress broadcastLocation;
 
 String ip = "127.0.0.1";
-int port = 903;
+int port = 9002;
 int incoming_port = 12312;
 
 int sequencerBoxesX = 10; //# of boxes along X
@@ -160,7 +160,7 @@ void draw()
         
         //I could not get any sound to work on Processing, but 'theoretically' this should work.
         sendMsg("/freq", currentSequencerStep*sizeX/sequencerBoxesX);
-        sendMsg("/vol", i*sizeY/sequencerBoxesY);
+        sendMsg("/vol", 0.05);
         sendMsg("/bang", 1);
       }
       squencerSubBoxCount = 0;
