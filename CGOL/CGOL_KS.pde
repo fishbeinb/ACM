@@ -5,7 +5,7 @@ import java.util.Random;
 OscP5 oscP5;
 NetAddress broadcastLocation;
 
-String ip = "127.0.0.1";
+String ip = "192.168.56.1";
 int port = 9002;
 int incoming_port = 12312;
 
@@ -28,6 +28,7 @@ int lives = 2;
 int type = 0;//0=Normal 1=Permanent 2=Permanent blank spot
 int splash = 0;//0=No Splash 1=Random 2=Inverse(B/W) 3=Random+RandomColor
 int radius = 5;//Radius for Splash
+int bal = 0;
 
 int currentSequencerStep = 0;
 int squencerSubBoxCount = 0;
@@ -51,7 +52,7 @@ void setup()
   
   oscP5 = new OscP5(this, incoming_port);
   broadcastLocation = new NetAddress(ip, port);
-  sendMsg("/vol", 1);
+  sendMsg("/vol", .05);
   sendMsg("/bypass", 1);  
 }
 
@@ -154,7 +155,7 @@ void draw()
         }
       }
       if(squencerSubBoxCount > sequencerSubBoxesX*sequencerSubBoxesY/10)
-      {  
+      { 
         fill(255,0,0,128);
         rect(currentSequencerStep*sizeX/sequencerBoxesX,i*sizeY/sequencerBoxesY,sizeX/sequencerBoxesX,sizeY/sequencerBoxesY);
         
@@ -166,6 +167,39 @@ void draw()
       squencerSubBoxCount = 0;
     }
     
+    //Inefficient
+    for(int i = 0; i <sequencerBoxesY; i ++)
+    {
+      for(int j = 0; j < sequencerBoxesX; j++)
+      {
+        for(int x=0; x<sequencerSubBoxesX; x++){
+          for(int y=0; y<sequencerSubBoxesY; y++){
+            if(multi[x+currentSequencerStep*sequencerSubBoxesX][y+i*sequencerSubBoxesY] > 0 || multi[x+currentSequencerStep*sequencerSubBoxesX][y+i*sequencerSubBoxesY] == -1)
+            {
+              squencerSubBoxCount = squencerSubBoxCount + 1;
+            }
+          }
+        }
+        if(squencerSubBoxCount > sequencerSubBoxesX*sequencerSubBoxesY/10)
+        { 
+          bal = bal + 1;
+        }
+        squencerSubBoxCount = 0;
+      }
+    }
+    if(bal>sequencerBoxesX*sequencerBoxesX*3/4)
+    {
+       lives = 1;
+       fill(111,23,63,128);
+       rect(0,0,200,200);
+    }
+    else if(bal<sequencerBoxesX*sequencerBoxesX/4)
+    {
+       lives = 2;
+       fill(62,21,232,128);
+       rect(50,50,200,200);
+    }
+    bal = 0;
     currentSequencerStep = currentSequencerStep + 1;
     if(currentSequencerStep >= sequencerBoxesX)
     {

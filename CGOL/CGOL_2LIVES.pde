@@ -1,4 +1,4 @@
-import oscP5.*;
+/*import oscP5.*;
 import netP5.*;
 
 OscP5 oscP5;
@@ -237,4 +237,4 @@ void sendMsg(String label, float data)
    OscMessage msg = new OscMessage(label);
    msg.add(data);
    oscP5.send(msg, broadcastLocation);
-}
+}*/
